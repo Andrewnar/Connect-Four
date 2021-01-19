@@ -85,3 +85,78 @@ class Board(object):
             if 0 <= col <= self.width: self.addMove(col, nextCh)
             if nextCh == 'X': nextCh = 'O'
             else: nextCh = 'X'
+
+    def winsFor(self, ox):
+        '''Determines if given checker, ox, has won either vertically,
+        horizantally, or diagonally, and returns True if they did.
+        returns False otherwise'''
+
+        '''Determines if given checker, ox, has won horizantally...
+        returns True if has, False otherwise'''
+        for x in range(self.__height):
+            for y in range(self.__width - 3):
+                if self.__board[x][y] == ox and \
+                    self.__board[x][y + 1] == ox and \
+                    self.__board[x][y + 2] == ox and \
+                    self.__board[x][y + 3] == ox:
+                    return True
+                
+
+        '''Determines if given checker, ox, has won vertically...
+        returns True if has, False otherwise'''        
+        for x in range(self.__height - 3):
+            for y in range(self.__width):
+                if self.__board[x][y] == ox and \
+                    self.__board[x + 1][y] == ox and \
+                    self.__board[x + 2][y] == ox and \
+                    self.__board[x + 3][y] == ox:
+                    return True
+
+        
+        '''Determines if given checker, ox, has won diagonally
+        from bottem left to top right...
+        returns True if has, False otherwise'''
+        for x in range(self.__height):
+            for y in range(self.__width - 3):
+                if self.__board[x][y] == ox and \
+                    self.__board[x - 1][y + 1] == ox and \
+                    self.__board[x - 2][y + 2] == ox and \
+                    self.__board[x - 3][y + 3] == ox:
+                    return True
+            
+        '''Determines if given checker, ox, has won diagonally
+        from bottem right to top left...
+        returns True if has, False otherwise'''
+        for x in range(self.__height - 3):
+            for y in range(self.__width - 3):
+                if self.__board[x][y] == ox and \
+                    self.__board[x + 1][y + 1] == ox and \
+                    self.__board[x + 2][y + 2] == ox and \
+                    self.__board[x + 3][y + 3] == ox:
+                    return True
+
+        return False
+                
+        if horizantal(ox) or vertical(ox) or diagonal1(ox) or diagonal2(ox):
+            return True
+        return False
+
+    def hostGame(self):
+        '''runs UI for connect four'''
+        print("\nWelcome to Connect Four")
+        ox = 'O'
+
+        while not self.winsFor(ox):
+            if ox == 'X': ox = 'O'
+            elif ox == 'O': ox = 'X'
+
+            print('\n' + str(self))
+            while True:
+                userChoice = int(input("\n" + str(ox) + "'s Choice: "))
+                if self.allowsMove(userChoice):
+                    self.addMove(userChoice, ox)
+                    break 
+        
+        print("\n" + str(ox) + " wins -- Congratulations!" + '\n' + str(self))
+
+        return True
